@@ -22,6 +22,7 @@ public class assignment1{
 		int custInt = sc.nextInt(); 
 		int custNum = 1;
 		boolean discount = false;
+		boolean bookDiscount = false;
 		int cartBooks = 0;
 		int cartMarks = 0;
 		int cartPaint = 0;
@@ -30,6 +31,9 @@ public class assignment1{
 			
 			if (custNum % 3 == 0){
 				discount = true;
+			}
+			else{
+				discount = false;
 			}
 
 			System.out.println("1 - Buy Books - $5.00 each ");
@@ -82,9 +86,22 @@ public class assignment1{
 			}
 			
 			else if (optInt == 5){
-				
+								
 				double booksCost, marksCost, packsCost, paintCost, subsubtotal, discountTotal, subtotal;
 				booksCost = marksCost = packsCost = paintCost = subsubtotal = discountTotal = subtotal = 0;
+
+				if (cartBooks > 0){
+					System.out.print("Do you have a Bookworm Card? (1 = yes 2 = no) ");
+					int bookWorm = sc.nextInt();
+				
+					if (bookWorm == 1){
+						bookDiscount = true;
+					}
+					else{
+						bookDiscount = false;
+					}
+				}
+
 				System.out.println("----------------------------------------------------");
 				if (discount == true){
 					System.out.println("You won a 10% discount!");
@@ -122,13 +139,28 @@ public class assignment1{
 
 				if (discount == true){
 					subsubtotal = booksCost + packsCost + marksCost + paintCost;
-					discountTotal = subsubtotal * 0.1; 
-					subtotal = subsubtotal - discountTotal;
-					System.out.printf("Discount! Saved:\t-$%.2f\n", discountTotal);
+					
+					if (bookDiscount == true){
+						discountTotal = subsubtotal * 0.1 + (booksCost * 0.25);
+						subtotal = subsubtotal - discountTotal;
+						System.out.printf("10%% Discount! Saved:\t\t-$%.2f\n", (subsubtotal * 0.1));
+						System.out.printf("Bookworm Discount! Saved:\t-$%.2f\n", (booksCost * 0.25));
+					}
+					else{
+						discountTotal = subsubtotal * 0.1; 
+						subtotal = subsubtotal - discountTotal;
+						System.out.printf("10%% Discount! Saved:\t\t-$%.2f\n", discountTotal);
+					}
 				}
 				
 				else {
 					subtotal = booksCost + packsCost + marksCost + paintCost;
+					
+					if (bookDiscount == true){
+						discountTotal = (booksCost * 0.25);
+						subtotal -= discountTotal;
+						System.out.printf("Bookworm Discount! Saved: \t-$%.2f\n", discountTotal);
+					}
 				}
 					
 				System.out.printf("\nSubtotal:\t\t\t$%.2f\n", subtotal);
@@ -139,7 +171,7 @@ public class assignment1{
 				System.out.printf("\nTotal:\t\t\t\t$%.2f\n", total);
 				System.out.println("\n----------------------------------------------------");
 				
-				System.out.print("\nEnter amount paind (no dollar sign): ");
+				System.out.print("\nEnter amount paid (no dollar sign): ");
 				double payment = sc.nextDouble();
 				while (payment < total){
 					System.out.print("Not enough money, please re-enter: ");
