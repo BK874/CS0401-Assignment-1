@@ -22,13 +22,11 @@ public class Blackjack{
 	play = contPlay();
 
 	//playLoop:
-	while (play.equals("Y")){
+	while (play.equals("Y") || play.equals("y") ||play.equals("Yes") || play.equals("yes")){
 	    double bet;
 	    int score;
 	    int dScore;
 	    int aCount = 0;
-	    int wCount = 0;
-	    int pCount = 0;
 	    String option;
 	    
 	    bet = betting(p.getMoney());
@@ -56,7 +54,7 @@ public class Blackjack{
 	    
 	    option = hitStay();
 	    // hitLoop:
-	    while (option.equals("H")){
+	    while (option.equals("H") || option.equals("h") || option.equals("hit")){
 		Card cN = new Card();
 		
 		if (cN.getValue().equals("Ace")){
@@ -75,6 +73,7 @@ public class Blackjack{
 		    System.out.println("Player busted!");
 		    System.out.println("You lost $" + bet + "!\n");
 		    p.changeMoney(-bet);
+		    p.changeHandsPlayed(1);
 		    break;
 		}
 		else{
@@ -82,16 +81,64 @@ public class Blackjack{
 		}
 	    }
 	    
-	    if (score < 21){
+	    if (score <= 21){
 		System.out.println("DEALER DEAL");
 		dScore = dealer();
 		
 		System.out.println("Player Score: " + score);
 		System.out.println("Dealer Score: " + dScore);
+		
+		if (score == 21 && dScore != 21){
+		    System.out.println("Player wins with Blackjack!");
+		    System.out.println("You won $" + 1.5 * bet + "!");
+		    
+		    p.changeMoney(1.5 * bet);
+		    p.changeHandsPlayed(1);
+		    p.changeHandsWon(1);
+		}
+		else if (dScore > 21){
+		    System.out.println("Dealer busted!");
+		    System.out.println("You won $" + bet + "!");
+		    
+		    p.changeMoney(bet);
+		    p.changeHandsPlayed(1);
+		    p.changeHandsWon(1);
+		}
+		else if (score > dScore){
+		    System.out.println("Player won!");
+		    System.out.println("You won $" + bet + "!");
+		    
+		    p.changeMoney(bet);
+		    p.changeHandsPlayed(1);
+		    p.changeHandsWon(1);
+		    
+		}
+		else if (dScore > score){
+		    System.out.println("Dealer won!");
+		    System.out.println("You lost $" + bet + "!");
+
+		    p.changeMoney(-bet);
+		    p.changeHandsPlayed(1);
+		}
+		else if (score == dScore){
+		    System.out.println("Push!");
+		    
+		    p.changeHandsPlayed(1);
+		}
+		    
 	    }
+	    
+	    if (p.getMoney() <= 0){
+		System.out.println("You have no more money to bet!");
+		break;
+	    }
+	    
 	    printInfo(name, p);
 	    play = contPlay();
 	}
+	
+	p.writeFile();
+	System.out.println("Thank you for playing Infinite Blackjack!");
     }
 
 
@@ -114,7 +161,9 @@ public class Blackjack{
 		System.out.print("Play a hand? (Y/N) ");
 	    }
 	    play = keyboard.nextLine();
-	}while (!play.equals("Y") && !play.equals("N"));
+	}while (!play.equals("Y") && !play.equals("N") && !play.equals("y") &&
+		!play.equals("n") && !play.equals("Yes") && !play.equals("No") &&
+		!play.equals("yes") && !play.equals("no"));
 	
 	return play;
     }
@@ -131,7 +180,7 @@ public class Blackjack{
 		System.out.print("Enter amount to bet: ");
 	    }
 	    bet = keyboard.nextDouble();
-	} while (bet < 0 || bet > amount);
+	} while (bet < 0.01 || bet > amount);
 	
 	return bet;
     }
@@ -147,7 +196,9 @@ public class Blackjack{
 		System.out.print("[H]it or [S]tay? ");
 	    }
 	    option = keyboard.nextLine();
-	}while (!option.equals("H") && !option.equals("S"));
+	}while (!option.equals("H") && !option.equals("S") && !option.equals("h") &&
+		!option.equals("s") && !option.equals("Hit") && !option.equals("Stay") &&
+		!option.equals("hit") && !option.equals("stay"));
 	
 	return option;
     }
