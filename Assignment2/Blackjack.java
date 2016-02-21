@@ -21,9 +21,15 @@ public class Blackjack{
 	printInfo(name, p);
 	play = contPlay();
 
+	//playLoop:
 	while (play.equals("Y")){
 	    double bet;
+	    int score;
+	    int dScore;
 	    int aCount = 0;
+	    int wCount = 0;
+	    int pCount = 0;
+	    String option;
 	    
 	    bet = betting(p.getMoney());
 	    System.out.println("PLAYER DEAL");
@@ -37,21 +43,59 @@ public class Blackjack{
 	    if (c2.getValue().equals("Ace")){
 		aCount ++;
 	    }
-
-	    System.out.print("Cards ");
+	    
+	    score = c1.calcScore() + c2.calcScore();
+	    score = getScore(score, aCount);
+	    
+	    System.out.print("Cards: ");
 	    c1.printInfo();
 	    System.out.print(" ");
 	    c2.printInfo();
 	    System.out.println();
-	    System.out.println("Score: " + getScore(c1.calcScore() + c2.calcScore(), aCount));
+	    System.out.println("Score: " +  score);
+	    
+	    option = hitStay();
+	    // hitLoop:
+	    while (option.equals("H")){
+		Card cN = new Card();
+		
+		if (cN.getValue().equals("Ace")){
+		    aCount++;
+		}
+		
+		score = score + cN.calcScore();
+		score = getScore(score, aCount);
 
-
+		System.out.print("Card dealt: ");
+		cN.printInfo();
+		System.out.println();
+		System.out.println("Score: " + score);
+		
+		if (score > 21){
+		    System.out.println("Player busted!");
+		    System.out.println("You lost $" + bet + "!\n");
+		    p.changeMoney(-bet);
+		    break;
+		}
+		else{
+		    option = hitStay();
+		}
+	    }
+	    
+	    if (score < 21){
+		System.out.println("DEALER DEAL");
+		dScore = dealer();
+		
+		System.out.println("Player Score: " + score);
+		System.out.println("Dealer Score: " + dScore);
+	    }
+	    printInfo(name, p);
 	    play = contPlay();
 	}
     }
 
 
-    public static void printInfo(String name, Player p){
+    private static void printInfo(String name, Player p){
 	System.out.printf("Name: %20s\n", name);
 	System.out.printf("Total Hands: %13d\n", p.getHandsPlayed());
 	System.out.printf("Hands Won: %15d\n", p.getHandsWon());
@@ -60,32 +104,108 @@ public class Blackjack{
     }
 
 
-    public static String contPlay(){
+    private static String contPlay(){
 	Scanner keyboard = new Scanner(System.in);
-	System.out.print("Play a hand? (Y/N) ");
-	while (!(keyboard.hasNext("Y")) && !(keyboard.hasNext("N"))){
+	String play;
+	do{
 	    System.out.print("Play a hand? (Y/N) ");
-	    keyboard.next();
-	}
-	String play = keyboard.nextLine();
+	    while(!keyboard.hasNextLine()){
+		keyboard.next();
+		System.out.print("Play a hand? (Y/N) ");
+	    }
+	    play = keyboard.nextLine();
+	}while (!play.equals("Y") && !play.equals("N"));
 	
 	return play;
     }
 
 
-    public static double betting(double amount){
+    private static double betting(double amount){
 	Scanner keyboard = new Scanner(System.in);
 	double bet;
 	do{
 	    System.out.print("Enter amount to bet: ");
 	    while (!keyboard.hasNextDouble()){
 		keyboard.next();
+		System.out.println("Please enter a value in a valid form (e.g. 4.50)\n");
 		System.out.print("Enter amount to bet: ");
 	    }
 	    bet = keyboard.nextDouble();
 	} while (bet < 0 || bet > amount);
 	
 	return bet;
+    }
+
+    
+    private static String hitStay(){
+	Scanner keyboard = new Scanner(System.in);
+	String option;
+	do{
+	    System.out.print("[H]it or [S]tay? ");
+	    while(!keyboard.hasNextLine()){
+		keyboard.next();
+		System.out.print("[H]it or [S]tay? ");
+	    }
+	    option = keyboard.nextLine();
+	}while (!option.equals("H") && !option.equals("S"));
+	
+	return option;
+    }
+
+    
+    private static int dealer(){
+	int score;
+	int aCount = 0;
+	Card d1 = new Card();
+	Card d2 = new Card();
+	
+	if (d1.getValue().equals("Ace")){
+	    aCount++;
+	}
+	if (d2.getValue().equals("Ace")){
+	    aCount++;
+	}
+	
+	System.out.print("Cards: ");
+	d1.printInfo();
+	System.out.print(" ");
+	d2.printInfo();
+	System.out.println();
+	
+	score = d1.calcScore() + d2.calcScore();
+	score = getScore(score, aCount);
+	
+	System.out.println("Score: " + score);
+	while (score < 22){
+	    if (score >= 18 || score == 21){
+		System.out.println("Stay!");
+	    
+		break;
+	    }
+	    else if (score == 17 && aCount == 0){
+		System.out.println("Stay!");
+	    
+		break;
+	    }
+	    else if (score <= 17){
+		System.out.println("Hit!");
+		Card dN = new Card();
+		
+		if (dN.getValue().equals("Ace")){
+		    aCount++;
+		}
+		
+		System.out.print("Cards dealt: ");
+		dN.printInfo();
+		System.out.println();
+		
+		score += dN.calcScore();
+		score = getScore(score, aCount);
+		
+		System.out.println("Score: " + score);
+	    }
+	}
+	return score;
     }
 
     private static int getScore(int points, int numAces) {
