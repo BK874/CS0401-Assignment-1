@@ -59,5 +59,13 @@ public class Player{
 	    return false;
 	}
     }
+
+    public void writeFile() throws IOException{
+	PrintWriter outputFile = new PrintWriter(file);
+	outputFile.println(money);
+	outputFile.println(handsPlayed);
+	outputFile.println(handsWon);
+	outputFile.close();
+    }
     
 }
