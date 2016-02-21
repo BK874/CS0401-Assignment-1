@@ -19,17 +19,17 @@ public class Card{
     public String getSuit(){
 	String name = "";
 
-	if (suit == "d"){
+	if (suit.equals("d")){
 	    name = "Diamonds";
 	}
-	else if (suit == "h"){
+	else if (suit.equals("h")){
 	    name = "Hearts";
 	}
-	else if (suit == "s"){
-	    name == "Spades";
+	else if (suit.equals("s")){
+	    name = "Spades";
 	}
-	else if (suit == "c"){
-	    name == "Clubs";
+	else if (suit.equals("c")){
+	    name = "Clubs";
 	}
 
 	return name;
@@ -38,16 +38,16 @@ public class Card{
     public String getValue(){
 	String num = "";
 	
-	if (value == "A"){
+	if (value.equals("A")){
 	    num = "Ace";
 	}
-	else if (value == "J"){
+	else if (value.equals("J")){
 	    num = "Jack";
 	}
-	else if (value == "Q"){
+	else if (value.equals("Q")){
 	    num = "Queen";
 	}
-	else if (value == "K"){
+	else if (value.equals("K")){
 	    num = "King";
 	}
 	else{
@@ -56,9 +56,24 @@ public class Card{
 	
 	return num;
     }
+    
+    public int calcScore(){
+	int score;
+	if (value.equals("10") || value.equals("J") ||
+	    value.equals("Q") || value.equals("K")){
+	    score = 10;
+	}
+	else if (value.equals("A")){
+	    score = 11;
+	}
+	else{
+	    score = Integer.parseInt(value);
+	}
+	return score;
+    }
 
     public void printInfo(){
-	System.out.println(value.toString()+suit.toString());
+	System.out.print(value + suit);
     }
 
 }
