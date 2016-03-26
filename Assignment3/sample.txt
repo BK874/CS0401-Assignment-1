@@ -5,7 +5,7 @@ two
 three
 four
 2
-14
+15
 5
 What is your name?
 3
@@ -13,7 +13,7 @@ Arthur, King of the Britons
 Sir Lancelot the Brave
 Sir Robin the Not-Quite-So-Brave-As-Sir Lancelot
 0
-14
+15
 6
 Who's on first?
 5
@@ -23,17 +23,17 @@ Because
 Who
 I don't know
 3
-14
+15
 7
 Which of the following is a terror of the fire swamp?
 4
 Lightning sand
 Flame spurt
-R.O.U.S
+R.O.U.S.
 All of the above
 3
-14
-4
+15
+5
 Who is the all-time greatest pilot?
 6
 Manfred von Richthofen
@@ -43,5 +43,5 @@ Luke Skywalker
 Kara Thrace
 Charles Lindbergh
 4
-14
-9
+15
+10
