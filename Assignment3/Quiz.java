@@ -133,6 +133,8 @@ public class Quiz{
 	    outputFile.println(questions.get(w).getNumCorrect());
 	}
 	outputFile.close();
+	
+	System.out.println("Thanks for taking the Quiz!\n");
         
     }
 
