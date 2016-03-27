@@ -1,3 +1,8 @@
+/*
+Assignment 3 - Quiz
+Brian Knotten
+*/
+
 public class Question{
 
     // Declare variables for storing the question, the number of the 
@@ -64,11 +69,14 @@ public class Question{
 	}
     }
     
-    
+    // Method for returning the array containing possible answers
     
     public String[] getAnswers(){
 	return answers;
     }
+
+    // Method for returning the number of possible answers - returns the
+    // length of the answers array
     
     public int getNumAns(){
 	return answers.length;
@@ -78,17 +86,27 @@ public class Question{
 	return answers[correct];
     }
     
+    // Method for returning the number of the correct answer
+
     public int getCorrectAnsNum(){
 	return correct;
     }
+
+    // Method for returning the number of times the question has been attempted
     
     public int getNumTried(){
 	return numTried;
     }
+
+    // Method for returning the number of times the question has been
+    // correctly answered
     
     public int getNumCorrect(){
 	return numCorrect;
     }
+
+    // Method for calculating and returning the percent of times the answer
+    // has been answered correctly
     
     public double getPercent(){
 	double percent = 100 * ((float)numCorrect/numTried);
