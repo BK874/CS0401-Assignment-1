@@ -25,10 +25,10 @@ public class Ballot extends JPanel{
 	for (int i = 2; i < tokens.length; i++){
 	    candidates[i-2] = tokens[i];
 	}
-
+	ActionListener listener = new ButtonListener();
 	for (int j = 0; j < candidates.length; j++){
 	    buttons[j] = new JButton(candidates[j]);
-	    buttons[j].addActionListener(new ButtonListener());
+	    buttons[j].addActionListener(listener);
 	}
 	
 	setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -45,11 +45,15 @@ public class Ballot extends JPanel{
     
     class ButtonListener implements ActionListener{
 
-	public void actionPerformerd(ActionEvent e){
-	 
+	public void actionPerformed(ActionEvent e){
+	    Color red = Color.RED;
 	    JButton pressed = (JButton) e.getSource();
-	    pressed.setForeground(Color.RED);
 	    
+	    if (pressed.getForeground() == red){
+		pressed.setForeground(Color.BLACK);
+	    }else{
+		pressed.setForeground(Color.RED);
+	    }
 	}
 	
     }

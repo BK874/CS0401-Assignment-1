@@ -18,7 +18,7 @@ public class assignment4{
 	String str = "";
 	int numBallots;
 	ArrayList <Ballot> ballots = new ArrayList<Ballot>();
-	ArrayList <Voter> voters = new ArrayList<Voter>();
+	Login login = new Login();
 
 	if (args.length > 0){
 	    System.out.println("DEMOCRACY!");
@@ -40,8 +40,6 @@ public class assignment4{
 	    ballots.add(x);
 	}
 	
-	voters = getVoters();
-		
 	
 	
 	final int WINDOW_WIDTH = 350;
@@ -55,25 +53,12 @@ public class assignment4{
 	  window.add(b);
 	  b.printCandidates();
 	}
+	window.add(login);
 	window.setVisible(true);
 	
     }
 
-    private static ArrayList<Voter> getVoters() throws IOException{
-	
-	ArrayList <Voter> voters = new ArrayList<Voter>();
-	File file = new File("voters.txt");
-	Scanner inputFile = new Scanner(file);
-	String str;
-
-	while (inputFile.hasNext()){
-	    str = inputFile.nextLine();
-	    Voter y = new Voter(str);
-	    voters.add(y);
-	}
-	
-	return voters;
-    }
-
 }
+
+
 
