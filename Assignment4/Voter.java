@@ -26,7 +26,7 @@ public class Voter{
 	return name;
     }
     
-    public String getStatus(){
+    public boolean getStatus(){
 	return voted;
     }
     
