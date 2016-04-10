@@ -11,19 +11,30 @@ public class assignment4{
     
     public static void main(String[] args) throws IOException{
 
-	String ballots = "";
-	
-	
+	String ballotFile = "";
+	String str = "";
+	int numBallots;
+	ArrayList <Ballot> ballots = new ArrayList<Ballot>();
+
 	if (args.length > 0){
 	    System.out.println("DEMOCRACY!");
-	    ballots = args[0];
+	    ballotFile = args[0];
 	}else{
 	    System.out.println("COMMUNIST!");
 	}
 	
-	System.out.println(ballots);
 
+	File file = new File(ballotFile);
+	Scanner inputFile = new Scanner(file);
 	
+	numBallots = inputFile.nextInt();
+	inputFile.nextLine();
 	
-    }
+	for (int i = 0; i < numBallots; i++){
+	    str = inputFile.nextLine();
+	    Ballot x = new Ballot(str);
+	    ballots.add(x);
+	}
+	    
 }
+
