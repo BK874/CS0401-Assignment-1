@@ -18,15 +18,17 @@ public class LoginInput extends JFrame{
     private JButton cancelButton;
     private final int WINDOW_WIDTH = 300;
     private final int WINDOW_HEIGHT = 200;
+    private boolean loggedIn;
     
     public LoginInput(){
 	
+	loggedIn = false;
 	setTitle("Login");
 	setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	buildPanel();
 	add(panel);
-	setVisible(true);
+	setVisible(false);
 
     }
     
@@ -46,42 +48,64 @@ public class LoginInput extends JFrame{
 	panel.add(loginButton);
 	panel.add(cancelButton);
     }
+
+    public boolean getStatus(){
+	return loggedIn;
+    }
+    
+    public void changeStatus(){
+	loggedIn = !loggedIn;
+    }
+    
+    public void reveal(){
+	setVisible(true);
+    }
+    
     
     class LoginListener implements ActionListener{
 	
-	public void actionPerformed(ActionEvent e){
-	    
-	    String actionCommand = e.getActionCommand();
-	    ArrayList <Voter> voters =  new ArrayList<Voter>();
-	    String input;
-	    int voterIndex;
-
-	    if (actionCommand.equals("Login")){
+	public void actionPerformed(ActionEvent e) {
+	    try{
+		String actionCommand = e.getActionCommand();
+		ArrayList <Voter> voters =  new ArrayList<Voter>();
+		String input;
+		int voterIndex;
 		
-		voters = getVoters();
-		input = idTextField.getText();
-		voterIndex = findVoter(voters, input);
-
-		if (voterIndex != -1){
-		    if (voters.get(voterIndex).getStatus() == false){
-			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() + 
-						      ", please make your choices.");
+		if (actionCommand.equals("Login")){
+		    
+		    voters = getVoters();
+		    input = idTextField.getText();
+		    voterIndex = findVoter(voters, input);
+		    
+		    if (voterIndex != -1){
+			if (voters.get(voterIndex).getStatus() == false){
+			    JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() + 
+							  ", please make your choices.");
+			    loggedIn = true;
+			    dispose();
+			}else{
+			    JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() 
+							  + ", you have already voted!");
+			    dispose();
+			}
+		    
 		    }else{
-			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() 
-						      + ", you have already voted!");
+			JOptionPane.showMessageDialog(null, "You are not registered to vote! Please" +
+						      " register before attempting to vote!");
+			dispose();
 		    }
 		    
 		}else{
-		    JOptionPane.showMessageDialog(null, "You are not registered to vote! Please" +
-						  " register before attempting to vote!");
+		    dispose();
 		}
-		    
-	    }else{
-		System.exit(0);
+	    }
+	    catch(IOException ex){
+		System.out.println(ex.toString());
+		System.out.println("Could not fine file.");
 	    }
 	}
     }
-    
+	
     private ArrayList<Voter> getVoters() throws IOException{
 	
 	ArrayList <Voter> voters = new ArrayList<Voter>();
@@ -98,7 +122,7 @@ public class LoginInput extends JFrame{
     }
     
     private int findVoter(ArrayList<Voter> voters, String id){
-
+	
 	for (Voter v : voters){
 	    if (id.equals(v.getID())){
 		return voters.indexOf(v);
@@ -106,5 +130,5 @@ public class LoginInput extends JFrame{
 	}
 	return -1;
     }
-	
+    
 }

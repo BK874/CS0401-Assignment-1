@@ -8,13 +8,20 @@ import javax.swing.*;
 
 public class Login extends JPanel{
     
+    private JButton login;
+    private boolean loggedIn;
+    LoginInput loginPrompt = new LoginInput();
+
     public Login(){
 	
-	JButton login = new JButton("Login to vote");
+	loggedIn = false;
+	login = new JButton("Login to vote");
 	login.addActionListener(new LoginPressed());
 	
-	setLayout(new BorderLayout());
-	add(login, BorderLayout.CENTER);
+	setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+	login.setAlignmentX(Component.CENTER_ALIGNMENT);
+	login.setAlignmentY(Component.CENTER_ALIGNMENT);
+	add(login);
 
 	
     }
@@ -27,8 +34,17 @@ public class Login extends JPanel{
  
 	    loggedIn.setEnabled(false);
 	    
-	     new LoginInput();
+	    loginPrompt.reveal();
 	    
 	}
     }
+    
+    public boolean getStatus(){
+	return loginPrompt.getStatus();
+    }
+    
+    public void changeStatus(){
+	loginPrompt.changeStatus();
+    }
+    
 }	

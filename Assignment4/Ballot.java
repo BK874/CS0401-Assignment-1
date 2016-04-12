@@ -37,7 +37,7 @@ public class Ballot extends JPanel{
 	for (JButton b : buttons){
 	    b.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    add(b);
-	 
+	    b.setEnabled(false);
 	}
 	
 	    
@@ -52,6 +52,9 @@ public class Ballot extends JPanel{
 	    if (pressed.getForeground() == red){
 		pressed.setForeground(Color.BLACK);
 	    }else{
+		for (JButton b : buttons){
+		    b.setForeground(Color.BLACK);
+		}
 		pressed.setForeground(Color.RED);
 	    }
 	}
@@ -61,6 +64,11 @@ public class Ballot extends JPanel{
     public void printCandidates(){
 	for (String s : candidates)
 	    System.out.println(s);
+    }
+    
+    public void changeEnabled(){
+	for (JButton b : buttons)
+	    b.setEnabled(!b.isEnabled());
     }
 
 }
