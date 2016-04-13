@@ -61,6 +61,7 @@ public class eVote extends JFrame{
 	    Voter y = new Voter(str);
 	    voters.add(y);
 	}
+	inputFile.close();
 	return voters;
     }
     
@@ -79,6 +80,7 @@ public class eVote extends JFrame{
 	    Ballot x = new Ballot(str);
 	    ballots.add(x);
 	}
+	inputFile.close();
 	return ballots;
     }
 
@@ -96,56 +98,83 @@ public class eVote extends JFrame{
     private class LoginPressed implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
-	    try{
-		JButton loggedIn = (JButton) e.getSource();
-		String userId = JOptionPane.showInputDialog("Please enter your voter ID");
-		ArrayList <Voter> voters = new ArrayList<Voter>();
-		voters = getVoters();
-		int voterIndex = findVoter(voters, userId);
-		
-		if (voterIndex != -1){
-		    if (voters.get(voterIndex).getStatus() == false){
-			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() + 
+	    JButton loggedIn = (JButton) e.getSource();
+	    String userId = JOptionPane.showInputDialog("Please enter your voter ID");
+	    int voterIndex = findVoter(voters, userId);
+	    
+	    if (voterIndex != -1){
+		if (voters.get(voterIndex).getStatus() == false){
+		    JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() + 
 						  ", please make your choices.");
-			loggedIn.setEnabled(false);
-			for (Ballot b : ballots){
-			    b.changeEnabled();
-			}
-			cast.setEnabled(true);
-		    }else{
-			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() 
-						      + ", you have already voted!");
+		    voters.get(voterIndex).changeStatus();
+		    loggedIn.setEnabled(false);
+		    for (Ballot b : ballots){
+			b.changeEnabled();
 		    }
-		    
+		    cast.setEnabled(true);
 		}else{
-		    JOptionPane.showMessageDialog(null, "You are not registered to vote! Please" +
-						      " register before attempting to vote!");
-		}	     
+		    JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() 
+						  + ", you have already voted!");
+		}
+		
+	    }else{
+		JOptionPane.showMessageDialog(null, "You are not registered to vote! Please" +
+					      " register before attempting to vote!");
+	    }	     
+	    
+	}
+	
+    }
+    
+    private class CastPressed implements ActionListener{
+	
+	public void actionPerformed(ActionEvent e){
+	    
+	    try{
+		JButton voteCast = (JButton) e.getSource();
+	    	    
+		int v = JOptionPane.showConfirmDialog(null, "Confirm vote?", "Vote Confirmation",
+						      JOptionPane.YES_NO_CANCEL_OPTION);
+		
+		if (v == 0){
+		    voteCast.setEnabled(false);
+		    login.setEnabled(true);
+		    for (Ballot b : ballots){
+			b.deselect();
+			b.changeEnabled();
+			b.updateVotes();
+		    }
+		    updateVoters(voters);
+		}
 	    }catch(IOException ex){
 		System.out.println(ex.toString());
 		System.out.println("Could not find file.");
 	    }
 	}
-    
     }
-
-    private class CastPressed implements ActionListener{
+    
+    public void updateVoters(ArrayList<Voter> voters) throws IOException{
+	File file1 = new File("voters.txt");
+	File file2 = new File("tempVotersTemp.txt");
+	Scanner inputFile = new Scanner(file1);
+	String oldLine;
+	PrintWriter outputFile = new PrintWriter(file2);
 	
-	public void actionPerformed(ActionEvent e){
+	for (int k = 0; k < voters.size(); k++){
+	    oldLine = inputFile.nextLine();
+	    Voter z = new Voter(oldLine);
 	    
-	    JButton voteCast = (JButton) e.getSource();
-	    	    
-	    int v = JOptionPane.showConfirmDialog(null, "Confirm vote?", "Vote Confirmation",
-					 JOptionPane.YES_NO_CANCEL_OPTION);
-
-	    if (v == 0){
-		voteCast.setEnabled(false);
-		login.setEnabled(true);
-		for (Ballot b : ballots){
-		    b.deselect();
-		    b.changeEnabled();
+	    if (voters.get(k).getStatus() != z.getStatus()){
+		for (Voter v : voters){
+		    outputFile.println(v.getID() + ":" + v.getName() + ":" + v.getStatus());
 		}
+
 	    }
 	}
-    }
+	inputFile.close();
+	outputFile.close();
+	file1.delete();
+	file2.renameTo(file1);
+	
+    }	
 }

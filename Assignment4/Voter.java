@@ -12,7 +12,7 @@ public class Voter{
 
     public Voter(String str){
 	tokens = str.split("[:]");
-	
+
 	id = tokens[0];
 	name = tokens[1];
 	voted = Boolean.parseBoolean(tokens[2]);
