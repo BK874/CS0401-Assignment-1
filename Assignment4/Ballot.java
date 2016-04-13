@@ -156,7 +156,6 @@ public class Ballot extends JPanel{
 
 	for (int m = 0; m < candidates.length; m++){
 	    oldLine = inputFile.nextLine();
-	    System.out.println(oldLine);
 	    tokens = oldLine.split("[:]");
 	    if (Integer.parseInt(tokens[1]) != votes[m]){
 		updated = true;
