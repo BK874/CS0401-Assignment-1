@@ -7,7 +7,7 @@ Brian Knotten
 
 import java.io.*;
 
-public class assignment4{
+public class Assig4{
     
     public static void main(String[] args) throws IOException{
 
