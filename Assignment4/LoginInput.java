@@ -101,7 +101,7 @@ public class LoginInput extends JFrame{
 	    }
 	    catch(IOException ex){
 		System.out.println(ex.toString());
-		System.out.println("Could not fine file.");
+		System.out.println("Could not find file.");
 	    }
 	}
     }

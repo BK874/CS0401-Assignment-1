@@ -70,5 +70,10 @@ public class Ballot extends JPanel{
 	for (JButton b : buttons)
 	    b.setEnabled(!b.isEnabled());
     }
+    
+    public void deselect(){
+	for (JButton b : buttons)
+	    b.setForeground(Color.BLACK);
+    }
 
 }

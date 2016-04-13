@@ -1,0 +1,111 @@
+	String ballotFile = "";
+	String str = "";
+	int numBallots;
+	ArrayList <Ballot> ballots = new ArrayList<Ballot>();
+	ArrayList <Voter> voters = new ArrayList<Voter>();
+	    
+	if (args.length > 0){
+	    System.out.println("DEMOCRACY!");
+	    ballotFile = args[0];
+	}else{
+	    System.out.println("COMMUNIST!");
+	}
+	
+	ballots = getBallots(ballotFile);
+	voters = getVoters();
+	
+	
+	JFrame window = new JFrame();
+	window.setTitle("E-Vote Version 1.0");
+	window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	window.setLayout(new GridLayout(1, ballots.size() + 2));
+	for (Ballot b : ballots){
+	    window.add(b);
+	}
+	
+	JButton login = new JButton("Login to vote");
+	login.addActionListener(new LoginPressed());
+	window.add(login);
+	window.pack();
+	window.setVisible(true);
+    }
+
+    
+    private static ArrayList<Voter> getVoters() throws IOException{
+	
+	ArrayList <Voter> voters = new ArrayList<Voter>();
+	File file = new File("voters.txt");
+	Scanner inputFile = new Scanner(file);
+	String str;
+	
+	while (inputFile.hasNext()){
+	    str = inputFile.nextLine();
+	    Voter y = new Voter(str);
+	    voters.add(y);
+	}
+	return voters;
+    }
+    
+    private static ArrayList<Ballot> getBallots(String ballotFile) throws IOException{
+	ArrayList <Ballot> ballots = new ArrayList<Ballot>();
+	File File = new File(ballotFile);
+	Scanner inputFile = new Scanner(File);
+	String str;
+	int numBallots;
+
+	numBallots = inputFile.nextInt();
+	inputFile.nextLine();
+	
+	for (int i = 0; i < numBallots; i++){
+	    str = inputFile.nextLine();
+	    Ballot x = new Ballot(str);
+	    ballots.add(x);
+	}
+	return ballots;
+    }
+
+    private static int findVoter(ArrayList<Voter> voters, String id){
+	
+	for (Voter v : voters){
+	    if (id.equals(v.getID())){
+		return voters.indexOf(v);
+	    }
+	}
+	return -1;
+    }
+ 
+
+    private static class LoginPressed implements ActionListener{
+	
+	public void actionPerformed(ActionEvent e){
+	    try{
+		JButton loggedIn = (JButton) e.getSource();
+		String userId = JOptionPane.showInputDialog("Please enter your voter ID");
+		ArrayList <Voter> voters = new ArrayList<Voter>();
+		voters = getVoters();
+		int voterIndex = findVoter(voters, userId);
+		
+		if (voterIndex != -1){
+		    if (voters.get(voterIndex).getStatus() == false){
+			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() + 
+						  ", please make your choices.");
+			loggedIn.setEnabled(false);
+			for (Ballot b : ballots){
+			    b.changeEnabled();
+			}
+		    }else{
+			JOptionPane.showMessageDialog(null, voters.get(voterIndex).getName() 
+						      + ", you have already voted!");
+		    }
+		    
+		}else{
+		    JOptionPane.showMessageDialog(null, "You are not registered to vote! Please" +
+						      " register before attempting to vote!");
+		}	     
+	    }catch(IOException ex){
+		System.out.println(ex.toString());
+		System.out.println("Could not find file.");
+	    }
+	}
+    
+    }
