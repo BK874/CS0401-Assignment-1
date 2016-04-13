@@ -1,5 +1,5 @@
 1234:Herb Weaselman:true
-9876:Marge Margificent:false
+9876:Marge Margificent:true
 4444:Ingmar Inglenook:true
-8888:Hector Heroman:false
-5678:Agnes Angular:false
+8888:Hector Heroman:true
+5678:Agnes Angular:true
